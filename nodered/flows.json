@@ -1,0 +1,102 @@
+[
+    {
+        "id": "flow_activos_independiente",
+        "type": "tab",
+        "label": "Sistema Activos Consultora",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "inject_timer_activos",
+        "type": "inject",
+        "z": "flow_activos_independiente",
+        "name": "Consultar BD (3s)",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "SELECT a.nombre_activo AS Activo, a.tipo AS Tipo, h.usuario AS Usuario, h.fecha_hora AS Fecha, h.estado AS Estado, h.ubicacion AS Ubicación FROM historial_activos h LEFT JOIN activos a ON h.rfid_uid = a.rfid_uid ORDER BY h.id DESC LIMIT 10;",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "sqlite_node_activos"
+            ]
+        ]
+    },
+    {
+        "id": "sqlite_node_activos",
+        "type": "sqlite",
+        "z": "flow_activos_independiente",
+        "mydb": "sqlite_db_config_activos",
+        "sqlquery": "viaPM",
+        "sql": "",
+        "name": "activos.db",
+        "x": 380,
+        "y": 100,
+        "wires": [
+            [
+                "ui_template_activos"
+            ]
+        ]
+    },
+    {
+        "id": "ui_template_activos",
+        "type": "ui_template",
+        "z": "flow_activos_independiente",
+        "group": "group_activos_exclusivo",
+        "name": "Tabla de Monitoreo",
+        "order": 1,
+        "width": "12",
+        "height": "8",
+        "format": "<div style=\"background-color: #ffffff; padding: 15px; border-radius: 8px;\"><h2 style=\"color:#007bff; text-align:center; margin-bottom: 20px;\">🏢 Monitoreo de Activos Tecnológicos - Consultora</h2><table style=\"width:100%; border-collapse: collapse; font-family: Arial, sans-serif;\"><thead><tr style=\"background-color: #007bff; color: white; text-align: left;\"><th style=\"padding: 10px; border: 1px solid #ddd;\">Activo</th><th style=\"padding: 10px; border: 1px solid #ddd;\">Tipo</th><th style=\"padding: 10px; border: 1px solid #ddd;\">Usuario</th><th style=\"padding: 10px; border: 1px solid #ddd;\">Fecha / Hora</th><th style=\"padding: 10px; border: 1px solid #ddd;\">Estado</th><th style=\"padding: 10px; border: 1px solid #ddd;\">Ubicación</th></tr></thead><tbody><tr ng-repeat=\"row in msg.payload\" style=\"border-bottom: 1px solid #ddd;\"><td style=\"padding: 8px; font-weight: bold;\">{{row.Activo}}</td><td style=\"padding: 8px;\">{{row.Tipo}}</td><td style=\"padding: 8px;\">{{row.Usuario}}</td><td style=\"padding: 8px;\">{{row.Fecha}}</td><td style=\"padding: 8px;\"><span style=\"background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;\">{{row.Estado}}</span></td><td style=\"padding: 8px;\">{{row.Ubicación}}</td></tr></tbody></table></div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 610,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "sqlite_db_config_activos",
+        "type": "sqlitedb",
+        "db": "C:\\Users\\xsalg\\OneDrive\\Documentos\\9 SEMESTRE\\TECNOLOGIAS EMERGENTES\\consultora\\activos.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "group_activos_exclusivo",
+        "type": "ui_group",
+        "name": "Registro de Equipos en Tiempo Real",
+        "tab": "tab_activos_exclusivo",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "tab_activos_exclusivo",
+        "type": "ui_tab",
+        "name": "Control de Activos Consultora",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "4ba291f5f989c45b",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-sqlite": "2.0.1",
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]

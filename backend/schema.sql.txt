@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS activos (
+    rfid_uid TEXT PRIMARY KEY,
+    nombre_activo TEXT,
+    tipo TEXT
+);
+
+CREATE TABLE IF NOT EXISTS historial_activos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rfid_uid TEXT,
+    usuario TEXT,
+    fecha_hora TEXT,
+    estado TEXT,
+    ubicacion TEXT,
+    FOREIGN KEY (rfid_uid) REFERENCES activos (rfid_uid)
+);
+
+INSERT OR IGNORE INTO activos VALUES 
+('AABBCCDD', '💻 Laptop Dell XPS 15', 'Laptop'),
+('1A2B3C4D', '📽️ Proyector Epson 4K', 'Proyector'),
+('5E6F7G8H', '🖨️ Impresora HP LaserJet', 'Impresora'),
+('9I8H7G6F', '📡 Router Cisco ISR', 'Router');
